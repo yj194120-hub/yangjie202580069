@@ -5,20 +5,219 @@
   <title>Travel Decision Lab | 旅行决策智能助手</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css" />
-
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- 内联 CSS -->
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC",
+        "Microsoft YaHei", sans-serif;
+      background: #f5f6fa;
+      color: #333;
+    }
+
+    .header {
+      text-align: center;
+      padding: 2.5rem 1rem 1.5rem;
+      background: linear-gradient(135deg, #3f8efc, #48c6ef);
+      color: #fff;
+    }
+
+    .header h1 {
+      margin: 0 0 0.5rem;
+      font-size: 2rem;
+    }
+
+    .header p {
+      margin: 0.2rem 0;
+    }
+
+    .header .subtitle {
+      margin-top: 0.5rem;
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 1.5rem 1.5rem 1.8rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 12px 30px rgba(15, 35, 95, 0.06);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      border-left: 4px solid #3f8efc;
+      padding-left: 0.6rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group label span {
+      color: #3f8efc;
+      margin-right: 0.25rem;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.6rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 0.95rem;
+      background: #fff;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #3f8efc;
+      box-shadow: 0 0 0 1px rgba(63, 142, 252, 0.25);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      display: inline-block;
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.15s ease, background 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #3f8efc, #48c6ef);
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(63, 142, 252, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 24px rgba(63, 142, 252, 0.58);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 16px rgba(63, 142, 252, 0.5);
+    }
+
+    .btn-secondary {
+      background: #e0e4f5;
+      color: #2b3b6b;
+      box-shadow: 0 4px 10px rgba(43, 59, 107, 0.15);
+    }
+
+    .btn-secondary:hover {
+      background: #d2d8f0;
+      transform: translateY(-1px);
+    }
+
+    .result-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .result-text {
+      flex: 1 1 260px;
+    }
+
+    .result-chart {
+      flex: 1 1 260px;
+    }
+
+    #destinationList {
+      padding-left: 1.2rem;
+    }
+
+    #destinationList li {
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    #summaryText {
+      line-height: 1.6;
+    }
+
+    .info-card p {
+      margin: 0.4rem 0;
+      line-height: 1.6;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 1.5rem 1rem 2rem;
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    .footer a {
+      color: #3f8efc;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* 响应式 */
+    @media (max-width: 600px) {
+      .header {
+        padding: 1.8rem 1rem 1.3rem;
+      }
+
+      .header h1 {
+        font-size: 1.6rem;
+      }
+
+      .card {
+        padding: 1.2rem 1rem 1.4rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <header class="header">
     <h1>Travel Decision Lab</h1>
     <p>基于你的旅行偏好与统计权重，智能推荐最适合你的旅行目的地。</p>
-    <p class="subtitle">（课程：통계의사결정 / 统计决策）</p>
+    <p class="subtitle">课程：통계의사결정（统计决策）&nbsp;·&nbsp;期末项目示例页面</p>
   </header>
 
   <main class="container">
+    <!-- 问卷区域 -->
     <section class="card">
       <h2>1. 填写你的旅行偏好</h2>
 
@@ -79,10 +278,14 @@
           </select>
         </div>
 
-        <button type="submit" class="btn-primary">生成旅行决策报告</button>
+        <div class="btn-row">
+          <button type="submit" class="btn-primary">生成旅行决策报告</button>
+          <button type="button" id="resetBtn" class="btn-secondary">清空并重新填写</button>
+        </div>
       </form>
     </section>
 
+    <!-- 结果区域 -->
     <section class="card" id="resultSection" style="display: none;">
       <h2>2. 你的旅行决策分析结果</h2>
 
@@ -102,4 +305,369 @@
       </div>
     </section>
 
+    <!-- 统计决策说明区域（可直接写进 PPT） -->
     <section class="card info-card">
+      <h2>3. 统计决策说明（可写入 PPT）</h2>
+      <p>
+        本网页通过简单问卷，将你的主观偏好转换为可量化的统计权重（例如预算权重、舒适度权重、风险偏好等），
+        再与预先设定的各旅行目的地特征向量进行加权评分，对每个目的地计算匹配度，并按得分排序，最终输出 Top 3 目的地。
+      </p>
+      <p>
+        这体现了“통계의사결정（统计决策）”课程中关于：
+        <strong>多指标决策、多属性效用、偏好加权、风险偏好</strong> 等理论在旅游场景中的应用。
+        在 PPT 用户手册中，可以将
+        <strong>问卷 → 量化 → 加权评分 → 排序 → 输出推荐</strong>
+        用流程图形式展示，同时配合本网页的截图作为系统界面演示。
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Travel Decision Lab &copy; 2025 &mdash; 课程：통계의사결정</p>
+  </footer>
+
+  <!-- 内联 JS -->
+  <script>
+    // 简单的目的地数据库：每个目的地有一组“统计特征”
+    const destinations = [
+      {
+        name: "北海道 · Japan",
+        scoreVector: {
+          budget: 0.6,
+          comfort: 0.9,
+          nature: 0.95,
+          city: 0.4,
+          culture: 0.6,
+          crowd: 0.4, // 人多程度
+          quiet: 0.9,
+          risk: 0.4, // 天气风险偏好匹配
+          slow: 0.8
+        },
+        description:
+          "适合喜欢雪景、温泉和安静自然的人。整体舒适度高，节奏偏慢。"
+      },
+      {
+        name: "京都 · Japan",
+        scoreVector: {
+          budget: 0.5,
+          comfort: 0.8,
+          nature: 0.6,
+          city: 0.5,
+          culture: 0.95,
+          crowd: 0.6,
+          quiet: 0.7,
+          risk: 0.5,
+          slow: 0.7
+        },
+        description:
+          "历史文化氛围浓厚，适合喜欢寺庙、古城、传统街区和安静散步的人。"
+      },
+      {
+        name: "巴黎 · France",
+        scoreVector: {
+          budget: 0.2,
+          comfort: 0.9,
+          nature: 0.3,
+          city: 0.95,
+          culture: 0.9,
+          crowd: 0.9,
+          quiet: 0.3,
+          risk: 0.6,
+          slow: 0.5
+        },
+        description:
+          "消费较高，但城市文化、艺术、购物、美食集中，是典型的大城市旅行。"
+      },
+      {
+        name: "清迈 · Thailand",
+        scoreVector: {
+          budget: 0.9,
+          comfort: 0.6,
+          nature: 0.8,
+          city: 0.5,
+          culture: 0.7,
+          crowd: 0.5,
+          quiet: 0.7,
+          risk: 0.7,
+          slow: 0.8
+        },
+        description:
+          "预算友好，节奏慢，自然与文化兼具，适合想放松、喜欢轻度冒险的人。"
+      },
+      {
+        name: "济州岛 · Korea",
+        scoreVector: {
+          budget: 0.7,
+          comfort: 0.7,
+          nature: 0.85,
+          city: 0.5,
+          culture: 0.5,
+          crowd: 0.6,
+          quiet: 0.7,
+          risk: 0.5,
+          slow: 0.7
+        },
+        description:
+          "离韩国较近，自然风景优美，节奏适中，适合海边散步和轻松自驾。"
+      }
+    ];
+
+    let radarChart = null;
+
+    // 由问卷答案生成“用户偏好向量”
+    function buildUserPreference() {
+      const q1 = document.getElementById("q1").value;
+      const q2 = document.getElementById("q2").value;
+      const q3 = document.getElementById("q3").value;
+      const q4 = document.getElementById("q4").value;
+      const q5 = document.getElementById("q5").value;
+
+      // 初始化向量（0~1）
+      let pref = {
+        budget: 0.5,
+        comfort: 0.5,
+        nature: 0.5,
+        city: 0.5,
+        culture: 0.5,
+        crowd: 0.5, // 喜欢人多
+        quiet: 0.5,
+        risk: 0.5, // 冒险倾向
+        slow: 0.5
+      };
+
+      // Q1 预算 vs 舒适度
+      if (q1 === "budget") {
+        pref.budget = 0.9;
+        pref.comfort = 0.4;
+      } else if (q1 === "comfort") {
+        pref.budget = 0.3;
+        pref.comfort = 0.9;
+      } else if (q1 === "middle") {
+        pref.budget = 0.6;
+        pref.comfort = 0.6;
+      }
+
+      // Q2 景点类型
+      if (q2 === "nature") {
+        pref.nature = 0.9;
+        pref.city = 0.4;
+      } else if (q2 === "city") {
+        pref.nature = 0.4;
+        pref.city = 0.9;
+      } else if (q2 === "culture") {
+        pref.culture = 0.95;
+      } else if (q2 === "mixed") {
+        pref.nature = 0.7;
+        pref.city = 0.7;
+        pref.culture = 0.7;
+      }
+
+      // Q3 人多 vs 安静
+      if (q3 === "quiet") {
+        pref.quiet = 0.9;
+        pref.crowd = 0.3;
+      } else if (q3 === "crowd") {
+        pref.quiet = 0.3;
+        pref.crowd = 0.9;
+      } else if (q3 === "middle") {
+        pref.quiet = 0.6;
+        pref.crowd = 0.6;
+      }
+
+      // Q4 风险偏好（天气）
+      if (q4 === "safe") {
+        pref.risk = 0.3;
+      } else if (q4 === "middle") {
+        pref.risk = 0.6;
+      } else if (q4 === "risky") {
+        pref.risk = 0.9;
+      }
+
+      // Q5 旅行节奏
+      if (q5 === "slow") {
+        pref.slow = 0.9;
+      } else if (q5 === "balanced") {
+        pref.slow = 0.6;
+      } else if (q5 === "tight") {
+        pref.slow = 0.3;
+      }
+
+      return pref;
+    }
+
+    // 计算用户偏好与目的地向量的“匹配度”
+    // 使用简单的加权内积形式（0~1之间）
+    function computeMatchScore(userPref, destVector) {
+      const keys = Object.keys(userPref);
+      let score = 0;
+      let maxScore = 0;
+
+      keys.forEach((k) => {
+        const u = userPref[k];
+        const d = destVector[k];
+        score += u * d;
+        maxScore += 1 * 1; // 理论最大值（均为1时）
+      });
+
+      return score / maxScore; // 0~1
+    }
+
+    // 根据用户偏好排序目的地
+    function getRankedDestinations(userPref) {
+      const scored = destinations.map((dest) => {
+        const match = computeMatchScore(userPref, dest.scoreVector);
+        return { ...dest, match };
+      });
+
+      scored.sort((a, b) => b.match - a.match);
+      return scored;
+    }
+
+    // 生成总结文字
+    function buildSummaryText(pref, top1) {
+      let riskText =
+        pref.risk > 0.7
+          ? "你在旅行中具有一定的冒险精神，愿意接受一些不确定性。"
+          : pref.risk < 0.4
+          ? "你在旅行中偏向稳妥，倾向于选择天气和条件更可预测的目的地。"
+          : "你在风险与稳定之间比较平衡，会综合考虑再做决定。";
+
+      let budgetText =
+        pref.budget > pref.comfort
+          ? "整体来看，你对预算比较敏感，更偏向性价比。"
+          : pref.budget < pref.comfort
+          ? "你更愿意为舒适度与体验质量多花一些钱。"
+          : "你在预算与舒适度之间保持了一种平衡。";
+
+      let styleText =
+        pref.slow > 0.7
+          ? "你的旅行节奏偏向慢生活，喜欢散步、咖啡和闲逛。"
+          : pref.slow < 0.4
+          ? "你更倾向行程稍微紧凑一点，希望在有限时间里尽可能多看一些。"
+          : "你的旅行节奏比较灵活，能接受适中的安排。";
+
+      return (
+        budgetText +
+        " " +
+        riskText +
+        " " +
+        styleText +
+        " 综合这些偏好，本系统认为最适合你的目的地之一是：" +
+        top1.name +
+        "。"
+      );
+    }
+
+    // 绘制/更新雷达图
+    function renderRadarChart(pref) {
+      const ctx = document.getElementById("preferenceChart");
+
+      const labels = [
+        "预算敏感度",
+        "舒适度重视程度",
+        "自然偏好",
+        "城市/购物偏好",
+        "文化/历史偏好",
+        "喜欢人多",
+        "喜欢安静",
+        "风险偏好",
+        "慢节奏旅行偏好"
+      ];
+
+      const data = [
+        pref.budget,
+        pref.comfort,
+        pref.nature,
+        pref.city,
+        pref.culture,
+        pref.crowd,
+        pref.quiet,
+        pref.risk,
+        pref.slow
+      ];
+
+      if (radarChart) {
+        radarChart.destroy();
+      }
+
+      radarChart = new Chart(ctx, {
+        type: "radar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "你的偏好（0~1）",
+              data: data,
+              fill: true,
+              borderWidth: 2,
+              pointRadius: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            r: {
+              suggestedMin: 0,
+              suggestedMax: 1
+            }
+          }
+        }
+      });
+    }
+
+    // 绑定事件
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("surveyForm");
+      const resultSection = document.getElementById("resultSection");
+      const destinationList = document.getElementById("destinationList");
+      const summaryText = document.getElementById("summaryText");
+      const resetBtn = document.getElementById("resetBtn");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const userPref = buildUserPreference();
+        const ranked = getRankedDestinations(userPref);
+
+        // 渲染 Top 3
+        destinationList.innerHTML = "";
+        ranked.slice(0, 3).forEach((dest, index) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<strong>${index + 1}. ${
+            dest.name
+          }</strong> &mdash; 匹配度约为 ${(dest.match * 100).toFixed(
+            1
+          )}%<br><small>${dest.description}</small>`;
+          destinationList.appendChild(li);
+        });
+
+        // 总结文本
+        summaryText.textContent = buildSummaryText(userPref, ranked[0]);
+
+        // 显示结果卡片
+        resultSection.style.display = "block";
+
+        // 绘制雷达图
+        renderRadarChart(userPref);
+
+        // 滚动到结果区域（方便在手机上查看）
+        resultSection.scrollIntoView({ behavior: "smooth" });
+      });
+
+      // 重置按钮：清空表单和结果
+      resetBtn.addEventListener("click", () => {
+        form.reset();
+        resultSection.style.display = "none";
+        if (radarChart) {
+          radarChart.destroy();
+          radarChart = null;
+        }
+        destinationList.innerHTML = "";
+        summaryText.textContent = "";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+  </script>
+</body>
+</html>
