@@ -2,163 +2,121 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>简单旅游目的地选择器</title>
-  <style>
-    body {
-      font-family: Arial, "Microsoft YaHei", sans-serif;
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 20px;
-      line-height: 1.6;
-    }
-    h1, h2 {
-      text-align: center;
-    }
-    .card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin: 6px 0;
-    }
-    button {
-      padding: 10px 18px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-    #btn-recommend {
-      background-color: #4CAF50;
-      color: white;
-    }
-    .small-text {
-      font-size: 12px;
-      color: #666;
-    }
-  </style>
+  <title>Travel Decision Lab | 旅行决策智能助手</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+  <header class="header">
+    <h1>Travel Decision Lab</h1>
+    <p>基于你的旅行偏好与统计权重，智能推荐最适合你的旅行目的地。</p>
+    <p class="subtitle">（课程：통계의사결정 / 统计决策）</p>
+  </header>
 
-  <h1>简单旅游目的地选择器</h1>
-  <p>
-    本网站通过<strong>两个简单问题</strong>（预算和旅行风格），
-    使用<strong>非常基础的加权评分</strong>方法，给出一个旅游目的地推荐。
-    这是《통계의사결정（统计决策）》课程中多指标决策的一个简单示例。
-  </p>
+  <main class="container">
+    <section class="card">
+      <h2>1. 填写你的旅行偏好</h2>
 
-  <!-- 问卷区 -->
-  <div class="card">
-    <h2>第 1 步：选择你的旅行偏好</h2>
+      <form id="surveyForm">
+        <!-- Q1 预算 vs 舒适度 -->
+        <div class="form-group">
+          <label><span>Q1.</span> 在旅行中，你更看重什么？</label>
+          <select id="q1" required>
+            <option value="">请选择</option>
+            <option value="budget">尽量省钱（预算优先）</option>
+            <option value="middle">两者差不多</option>
+            <option value="comfort">舒适度优先（住宿/交通更重要）</option>
+          </select>
+        </div>
 
-    <h3>1. 你的旅行预算</h3>
-    <label><input type="radio" name="budget" value="1"> 低预算（背包旅行为主）</label>
-    <label><input type="radio" name="budget" value="2"> 中等预算（适中消费）</label>
-    <label><input type="radio" name="budget" value="3"> 高预算（舒适、享受为主）</label>
+        <!-- Q2 景点类型 -->
+        <div class="form-group">
+          <label><span>Q2.</span> 你最喜欢哪种类型的旅行？</label>
+          <select id="q2" required>
+            <option value="">请选择</option>
+            <option value="nature">自然风景（海边、山、湖）</option>
+            <option value="city">城市购物、美食</option>
+            <option value="culture">历史文化、古迹</option>
+            <option value="mixed">什么都想体验一点</option>
+          </select>
+        </div>
 
-    <h3>2. 你偏好的旅行风格</h3>
-    <label><input type="radio" name="style" value="1"> 自然风景（海边、山、温泉）</label>
-    <label><input type="radio" name="style" value="2"> 城市体验（购物、夜景、现代化）</label>
-    <label><input type="radio" name="style" value="3"> 美食之旅（吃吃吃）</label>
+        <!-- Q3 人多 vs 安静 -->
+        <div class="form-group">
+          <label><span>Q3.</span> 对“人多”的接受程度如何？</label>
+          <select id="q3" required>
+            <option value="">请选择</option>
+            <option value="quiet">尽量避开人群，喜欢安静</option>
+            <option value="middle">适中，无所谓</option>
+            <option value="crowd">人越多越热闹，喜欢人气旺的地方</option>
+          </select>
+        </div>
 
-    <button id="btn-recommend">帮我推荐目的地</button>
-    <p class="small-text">
-      ※ 说明：我们把预算和风格分别赋予 1～3 分，通过加权计算总分，用于做出简单的统计决策。
-    </p>
-  </div>
+        <!-- Q4 风险偏好（天气） -->
+        <div class="form-group">
+          <label><span>Q4.</span> 如果某地天气不稳定，但可能非常漂亮，你会？</label>
+          <select id="q4" required>
+            <option value="">请选择</option>
+            <option value="safe">选择天气更稳定的安全选项</option>
+            <option value="middle">看情况，可以冒一点点风险</option>
+            <option value="risky">没关系，愿意赌一把好天气</option>
+          </select>
+        </div>
 
-  <!-- 结果区 -->
-  <div class="card">
-    <h2>第 2 步：结果（统计决策推荐）</h2>
-    <p id="result-text">请选择上面的选项，然后点击“帮我推荐目的地”。</p>
-  </div>
+        <!-- Q5 旅行节奏 -->
+        <div class="form-group">
+          <label><span>Q5.</span> 你偏好的旅行节奏是？</label>
+          <select id="q5" required>
+            <option value="">请选择</option>
+            <option value="slow">慢节奏，咖啡、散步、闲逛</option>
+            <option value="balanced">适中，玩得多又不会太累</option>
+            <option value="tight">行程排满，想多看一些地方</option>
+          </select>
+        </div>
 
-  <!-- 统计方法说明区（对应课程） -->
-  <div class="card">
-    <h2>统计决策方法说明</h2>
-    <p>
-      本系统是一个<strong>非常简化的统计决策示例</strong>：
-    </p>
-    <ol>
-      <li>将“预算”和“旅行风格”分别转化为 1～3 分的数值。</li>
-      <li>计算：<strong>总分 = 预算分 × 0.5 + 风格分 × 0.5</strong>（等权重的加权平均）。</li>
-      <li>根据不同的组合，选择一个最匹配的城市，并给出“匹配分数”。</li>
-    </ol>
-    <p>
-      这种方式体现了《통계의사결정》中<br>
-      “用量化的数据（分数）来支持决策”的基本思想。
-    </p>
-  </div>
+        <button type="submit" class="btn-primary">生成旅行决策报告</button>
+      </form>
+    </section>
 
-  <script>
-    const btn = document.getElementById('btn-recommend');
-    const resultText = document.getElementById('result-text');
+    <section class="card" id="resultSection" style="display: none;">
+      <h2>2. 你的旅行决策分析结果</h2>
 
-    btn.addEventListener('click', function () {
-      // 获取用户选择的预算和风格
-      const budgetInput = document.querySelector('input[name="budget"]:checked');
-      const styleInput = document.querySelector('input[name="style"]:checked');
+      <div class="result-layout">
+        <div class="result-text">
+          <h3>推荐目的地 Top 3</h3>
+          <ol id="destinationList"></ol>
 
-      if (!budgetInput || !styleInput) {
-        resultText.textContent = '请先选择“预算”和“旅行风格”两个选项。';
-        return;
-      }
+          <h3>决策风格小结</h3>
+          <p id="summaryText"></p>
+        </div>
 
-      const budget = Number(budgetInput.value); // 1~3
-      const style = Number(styleInput.value);   // 1~3
+        <div class="result-chart">
+          <h3>你的旅行偏好雷达图</h3>
+          <canvas id="preferenceChart" width="320" height="320"></canvas>
+        </div>
+      </div>
+    </section>
 
-      // 简单的加权评分（这里 0.5 和 0.5 是等权重）
-      const score = (budget * 0.5 + style * 0.5) * 30 + 40; 
-      // 上面这一行只是把 1~3 的平均分变成大约 40~100 分之间的“匹配分数”，好看一点
+    <section class="card info-card">
+      <h2>3. 统计决策说明（可写入 PPT）</h2>
+      <p>
+        本网页通过简单问卷，将你的主观偏好转换为可量化的统计权重（例如预算权重、舒适度权重、风险偏好等），
+        再与预先设定的各旅行目的地特征向量进行加权评分，对每个目的地计算匹配度，并按得分排序，最终输出 Top 3 目的地。
+      </p>
+      <p>
+        这体现了“통계의사결정（统计决策）”课程中关于：<strong>多指标决策、多属性效用、偏好加权、风险偏好</strong>等理论在旅游场景中的应用。
+        在 PPT 用户手册中，可以将问卷 → 量化 → 加权评分 → 推荐结果 用流程图形式展示。
+      </p>
+    </section>
+  </main>
 
-      let city = '';
-      let reason = '';
+  <footer class="footer">
+    <p>Travel Decision Lab &copy; 2025 &mdash; 课程：통계의사결정</p>
+  </footer>
 
-      // 根据预算和风格的组合，用 if 做简单决策
-      if (budget === 1 && style === 1) {
-        city = '清迈';
-        reason = '你偏好自然，又希望控制预算，清迈比较便宜，适合轻松慢游。';
-      } else if (budget === 1 && style === 2) {
-        city = '首尔';
-        reason = '预算不高但又想体验城市生活，首尔交通便利，短途旅行性价比高。';
-      } else if (budget === 1 && style === 3) {
-        city = '台北';
-        reason = '你预算有限但非常看重美食，台北夜市、小吃都很有名。';
-      } else if (budget === 2 && style === 1) {
-        city = '北海道';
-        reason = '中等预算又喜欢自然，北海道的雪景、温泉都很适合放松。';
-      } else if (budget === 2 && style === 2) {
-        city = '东京';
-        reason = '你有一定预算，又偏好城市，东京购物、美食、文化都很丰富。';
-      } else if (budget === 2 && style === 3) {
-        city = '大阪';
-        reason = '中等预算、美食优先，大阪是非常典型的“吃货”城市。';
-      } else if (budget === 3 && style === 1) {
-        city = '瑞士卢塞恩';
-        reason = '高预算配合自然风景，阿尔卑斯山、湖光山色非常适合深度度假。';
-      } else if (budget === 3 && style === 2) {
-        city = '巴黎';
-        reason = '你追求高品质的城市体验，巴黎在艺术、购物、文化方面都很突出。';
-      } else if (budget === 3 && style === 3) {
-        city = '米其林餐厅巡礼之旅';
-        reason = '高预算 + 美食优先，非常适合安排多城市的米其林餐厅之旅。';
-      }
-
-      // 输出结果文字
-      resultText.innerHTML = `
-        <strong>推荐目的地：</strong> ${city}<br>
-        <strong>匹配分数：</strong> 约 ${Math.round(score)} 分（0~100 分中的相对分数）<br><br>
-        <strong>推荐理由（基于简单统计决策）：</strong><br>
-        ${reason}<br><br>
-        我们将你的“预算”和“旅行风格”转化为数值并加权计算，<br>
-        这是一个非常简单的 <strong>다기준 통계의사결정（多指标统计决策）</strong> 示例。
-      `;
-    });
-  </script>
-
-</body>
-</html>
+  <!-- 自己的 JS -->
